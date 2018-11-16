@@ -1,0 +1,51 @@
+{
+  "name": "vscode-react-component-viewer",
+  "displayName": "vscode-react-component-viewer",
+  "description": "Description here",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.29.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:typescript",
+    "onLanguage:javascript"
+  ],
+  "main": "./out/extension",
+  "contributes": {
+    "commands": [
+      {
+        "command": "cosmos.showPreview",
+        "title": "Show React Cosmos locked preview"
+      }
+    ]
+  },
+  "menus": {
+    "commandPalette": [
+      {
+        "command": "extension.sayHello",
+        "when": "editorHasSelection"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "npm run compile && node ./node_modules/vscode/bin/test"
+  },
+  "devDependencies": {
+    "@types/jest": "^23.3.9",
+    "@types/mocha": "^2.2.42",
+    "@types/node": "^8.10.25",
+    "jest": "^23.6.0",
+    "prettier": "^1.15.2",
+    "ts-jest": "^23.10.4",
+    "tslint": "^5.8.0",
+    "typescript": "^2.6.1",
+    "vscode": "^1.1.21"
+  }
+}
