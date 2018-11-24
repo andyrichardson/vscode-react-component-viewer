@@ -1,5 +1,6 @@
 'use strict';
 import * as vscode from 'vscode';
+import fetch from 'cross-fetch';
 
 export function getFixtureName() {
   if (vscode.window.activeTextEditor === undefined) {
@@ -31,22 +32,44 @@ export function getFixtureName() {
   );
 }
 
+const startCosmos = async () => {
+  try {
+    await fetch('http://localhost:8989');
+    return true;
+  } catch (err) {}
+
+  if (require.main === undefined) {
+    vscode.window.showErrorMessage('Unable to import');
+    return false;
+  }
+
+  const projectPath = vscode.workspace.rootPath;
+
+  if (projectPath === undefined) {
+    vscode.window.showErrorMessage('Unable to determine project root.');
+    return false;
+  }
+
+  process.chdir(projectPath);
+  try {
+    require(`${
+      vscode.workspace.rootPath
+    }/node_modules/react-cosmos/bin/cosmos`);
+  } catch (err) {
+    vscode.window.showErrorMessage('Unable to start cosmos.', err);
+    return false;
+  }
+
+  return true;
+};
+
 export function activate(context: vscode.ExtensionContext) {
-  vscode.commands.registerCommand('cosmos.showPreview', () => {
-    const fixture = getFixtureName();
-    if (!fixture) {
+  vscode.commands.registerCommand('cosmos.showPreview', async () => {
+    const hasStarted = await startCosmos();
+
+    if (!hasStarted) {
       return;
     }
-
-    // const panel = vscode.window.createWebviewPanel(
-    //   'CosmosPreview',
-    //   'Component Preview',
-    //   vscode.ViewColumn.Two,
-    //   {
-    //     enableScripts: true,
-    //     localResourceRoots: {}
-    //   }
-    // );
   });
 }
 
